@@ -12,7 +12,7 @@ class CustomerUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,12 +22,14 @@ class CustomerUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $customerId = $this->route('customer');
+
         return [
-        "name" => "sometimes|string|max:255",
-        "phone_number" => "sometimes|string|max:10|unique:customers,phone_number",
-        "address" => "sometimes|string|max:255",
-        "password" => "sometimes|min:8|string",
-        "balance" => "sometimes|integer"
+            "name" => "sometimes|string|max:255",
+            "phone_number" => ["sometimes", "string", "max:10", Rule::unique('customers', 'phone_number')->ignore($customerId)],
+            "address" => "sometimes|string|max:255",
+            "password" => "sometimes|min:8|string",
+            "balance" => "sometimes|integer"
         ];
     }
 }

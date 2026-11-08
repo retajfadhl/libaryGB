@@ -18,10 +18,10 @@ class StaffController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StaffStoreRequest $request)
-    {
-        $staff = Staff::create($request->all());
-        return StaffResource::make($staff);
-    }
+{
+    $staff = Staff::create($request->validated());
+    return StaffResource::make($staff);
+}
 
     /**
      * Display the specified resource.
@@ -34,12 +34,12 @@ class StaffController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StaffUpdateRequest $request, $id)
-    {
-        $staff = Staff::findOrFail($id);
-        $staff->update($request->all());
-        return StaffResource::make($staff);
-    }
+   public function update(StaffUpdateRequest $request, $id)
+{
+    $staff = Staff::findOrFail($id);
+    $staff->update($request->validated());
+    return StaffResource::make($staff);
+}
 
     /**
      * Remove the specified resource from storage.
