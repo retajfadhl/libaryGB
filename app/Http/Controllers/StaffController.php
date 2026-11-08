@@ -11,31 +11,34 @@ class StaffController extends Controller
      */
     public function index()
     {
-        //
+        return StaffResource::collection(Staff::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StaffStoreRequest $request)
     {
-        //
+        $staff = Staff::create($request->all());
+        return StaffResource::make($staff);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show( $id)
     {
-        //
+        return StaffResource::make(Staff::findOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StaffUpdateRequest $request, $id)
     {
-        //
+        $staff = Staff::findOrFail($id);
+        $staff->update($request->all());
+        return StaffResource::make($staff);
     }
 
     /**
@@ -43,6 +46,7 @@ class StaffController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Staff::findOrFail($id)->delete();
+        return response()->json("Staff member deleted successfully.");
     }
 }

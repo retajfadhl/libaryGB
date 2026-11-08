@@ -12,15 +12,16 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        return CustomerResource::collection(Customer::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerStoreRequest $request)
     {
-        //
+        $customer = Customer::create($request->validated());
+        return CustomerResource::make($customer);
     }
 
     /**
@@ -28,15 +29,16 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        return CustomerResource::make($customer);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $customer)
+    public function update(CustomerUpdateRequest $request, Customer $customer)
     {
-        //
+        $customer->update($request->validated());
+        return CustomerResource::make($customer);
     }
 
     /**
@@ -44,6 +46,7 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+        return response()->json(["message" => "deleted "]);
     }
 }
