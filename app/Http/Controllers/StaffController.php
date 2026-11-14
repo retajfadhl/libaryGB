@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StaffStoreRequest;
+use App\Http\Requests\StaffUpdateRequest;
+use App\Http\Resources\StaffResource;
+use App\Models\Staff;
 
 class StaffController extends Controller
 {
