@@ -1,12 +1,24 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerStoreRequest;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class CustomerAuthController extends Controller
 {
+    public function register(CustomerStoreRequest $request) {
+        $customer = Customer::create($request->validated());
+        $token = $customer->createToken('login-token')->plainTextToken;
+
+        return response()->json([
+            'customer' => CustomerResource::make($customer),
+            'token' => $token
+        ], 201);
+    }
+
     public function login(Request $request) {
         $request->validate([
             'phone_number' => 'required',

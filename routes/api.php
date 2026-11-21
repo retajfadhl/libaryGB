@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\borrowingsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffAuthController;
@@ -23,13 +24,22 @@ Route::middleware("auth:staff")->group(function () {
     Route::post("/book", [BookController::class, "store"]);
     Route::put("/book/{book}", [BookController::class, "update"]);
     Route::delete("/book/{book}", [BookController::class, "destroy"]);
+
+    Route::apiResource("customer", CustomerController::class)
+        ->parameter("customer", "customer");
+
+    Route::put("/borrow", [borrowingsController::class, "markAsReturned"]);
+    Route::get("/borrow/all", [borrowingsController::class, "all"]);
+    Route::get("/borrow/overdue", [borrowingsController::class, "overdue"]);
 });
 
 Route::middleware("auth:customers")->group(function () {
     Route::get("/customer-me", [CustomerAuthController::class, "me"]);
     Route::post("/customer-logout", [CustomerAuthController::class, "logout"]);
-    Route::apiResource("customer", CustomerController::class)
-        ->parameter("customer", "customer");
+
+    Route::post("/borrow", [borrowingsController::class, "borrow"]);
+    Route::get("/borrow", [borrowingsController::class, "index"]);
+    Route::delete("/borrow/{id}", [borrowingsController::class, "destroy"]);
 });
 
 Route::middleware("auth:sanctum")->group(function () {
@@ -41,3 +51,4 @@ Route::middleware("auth:sanctum")->group(function () {
 
 Route::post("/staff/login", [StaffAuthController::class, "login"]);
 Route::post("/customer/login", [CustomerAuthController::class, "login"]);
+Route::post("/customer/register", [CustomerAuthController::class, "register"]);

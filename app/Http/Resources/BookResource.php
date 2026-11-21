@@ -17,9 +17,12 @@ class BookResource extends JsonResource
         return [
             "id"           => $this->id,
             "name"         => $this->name,
+            "ISBN"         => $this->ISBN,
             "author"       => $this->author,
             "publisher"    => $this->publisher,
             "publish_date" => $this->publish_date,
+            // shortcut: one query per book in a list, use withExists() in index() if lists get big
+            "is_available" => !$this->customers()->wherePivot("is_returned", false)->exists(),
             "category"     => CategoryResource::make($this->whenLoaded("category")),
         ];
     }
